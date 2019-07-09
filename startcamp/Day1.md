@@ -11,17 +11,16 @@
    is_summer = True # 참/거짓, Boolean(True/False)
    ```
 
-   ```python
 # 리스트 활용법
    my_list = [1, 2, 3, '정지수', '염겨레']
    print(my_list[0]) #=> 1
-   
+
    # 딕셔너리 활용법
    my_dictionary = {'정지수': '남자', '염겨레': '남자'}
    print(my_dictionary['정지수']) #=> '남자'
-   ```
+
    
-   
+
 
 2. 조건문
 

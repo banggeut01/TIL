@@ -175,3 +175,19 @@ return render_template('hi.html', name=name)
 <h1>{{name}} 안녕?</h1>
 ```
 
+* 주석
+
+  ```html
+  <!-- 주석 내용 -->
+  
+  <!-- 잘못된 예, html 화면이 제대로 뜨지 않는다. (jinja2).exceptions.TemplateSyntaxError) -->
+  <!-- {{% %}} 로직 코드 --> 
+  <!-- {{   }} 출력 코드 -->
+  
+  <!-- 옳은 예 -->
+  <!-- {# {{% %}} #} -->
+  <!-- {# {{   }} #} -->
+  ```
+
+  
+

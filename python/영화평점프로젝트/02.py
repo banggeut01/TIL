@@ -3,9 +3,10 @@
 import requests
 # import pprint
 import csv
+from decouple import config
 
+key = config('KEY')
 movie_infos = [] # 영화 상세정보 딕셔너리가 들어갈 리스트
-key = '2c6010411226af12f598c9e149bfeca8'
 api_url = f'http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key={key}&movieCd='
 # print(api_url)
 
@@ -34,6 +35,7 @@ with open('boxoffice.csv', 'r', encoding='utf-8') as f:
         }
         movie_infos.append(temp)
 
+# 영화 상세정보 movie.csv에 저장
 with open('movie.csv', 'w', encoding='utf-8') as f:
     # 헤더와 딕셔너리 키 값을 맞춰줘야함.
     fieldnames = ['movieCd', 'movieNm', 'movieNmEn', 'movieNmOg', 'watchGradeNm', 'openDt', 'showTm', 'genreNm', 'peopleNm'] 

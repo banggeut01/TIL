@@ -3,15 +3,17 @@
 import requests
 import pprint
 import csv
+from decouple import config
 
+key = config('KEY')
 # 영화인 상세정보 딕셔너리가 들어갈 리스트
 people_infos = [] 
-key = '2c6010411226af12f598c9e149bfeca8'
 api_url = f'http://www.kobis.or.kr/kobisopenapi/webservice/rest/people/searchPeopleList.json?key={key}'
 # print(api_url)
 
 with open('movie.csv', 'r', encoding='utf-8') as f:
     reader = csv.DictReader(f)
+    # row는 한 영화의 상세정보를 담고 있음
     for row in reader:
         temp = {}
         # 만약 peopleCd == None 이면 다음 row로 넘어감
@@ -24,7 +26,7 @@ with open('movie.csv', 'r', encoding='utf-8') as f:
         if not response.get('peopleListResult').get('peopleList'):
             continue
         for people in response.get('peopleListResult').get('peopleList'):
-            # 영화 감독 이름이 일치하고, repRoleNm이 감독일 때
+            # 영화 감독 이름이 일치하고, repRoleNm이 감독일 때 영화인 정보를 저장하고 반복문 종료
             if people.get('peopleNm') == row.get('peopleNm') and people.get('repRoleNm') == '감독':
                 # print(row.get('peopleNm'))
                 peopleCd = people.get('peopleCd')

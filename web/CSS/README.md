@@ -36,7 +36,7 @@
 
 * Box model
 
-  ![CreatePlan](./image/boxmodel.png)
+  ![boxmodel](./image/boxmodel.png)
 
   * margin : `margin-top`, `margind-right` 등.
     * margin-shorthand의 margin 값 1개(상하좌우), 2개(상하, 좌우), 3개(상, 좌우, 하), 4개(상, 좌, 하, 우)를 이용해 여백 표현 가능.

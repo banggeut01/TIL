@@ -7,13 +7,12 @@ class Point:
         self.y = y
     
     def __str__(self):
-        return f'Point:({x}, {y})'
+        return f'Point:({self.x}, {self.y})'
 
 class Circle:
 
-    def __init__(self, other, r):
-        x, y = other.x, other.y
-        self.center = (x, y)
+    def __init__(self, center, r):
+        self.center = center
         self.r = r
 
     def get_area(self):
@@ -25,20 +24,10 @@ class Circle:
         return perimeter
 
     def get_center(self):
-        return self.center
+        return f'({self.center.x}, {self.center.y})'
 
     def __str__(self):
-        return f'Circle:({self.center[0]},{self.center[1]}),r:{self.r}'
-
-
-
-
-
-
-
-
-
-
+        return f'Circle:({self.center.x},{self.center.y}),r:{self.r}'
 
 
 

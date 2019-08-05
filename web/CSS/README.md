@@ -106,3 +106,36 @@
   * 예시
     * [08_float.html](08_float.html)
     * [08_style.css](08_style.css)
+
+### 배경이미지
+
+
+
+### font
+
+기본적으로 16px
+
+* font-size
+* font-family : 'Times New roman', Times, serif
+  * 띄어쓰기만 ''.
+  * 첫번째 폰트부터 없으면 다음 폰트.
+* font-weight : bolder, lighter, 100  => 굵기
+
+* font-style: italic => 모양
+
+  * https://fonts.google.com/?subset=korean
+
+  * 원하는 폰트 + 담기
+
+  * 링크 복사 후 html 문서에 붙여넣기
+
+    ```html
+    <head>
+        <link href="https://fonts.googleapis.com/css?family=Kirang+Haerang|Yeon+Sung&display=swap" rel="stylesheet">
+    </head>
+    ```
+
+## 부트스트랩
+
+구글 웹스토어 > wappalyzer : 웹사이트 분석 프로그램
+

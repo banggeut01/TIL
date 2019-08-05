@@ -65,4 +65,9 @@ $ source ~/.bashrc
   alias venv="source ~/python-virtualenv/3.7.4/Scripts/activate"
   venv
   ```
-
+  
+  * `pip install`할 때 주의하기! 
+  
+  * 현재 어떤 버전의 python이 실행되고 있는지!
+  
+    

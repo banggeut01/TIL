@@ -161,3 +161,7 @@ profile.jpg		# profile.jpg 파일
 처음에는 직접 만들기보다 [gitignore](https://www.gitignore.io)에서 내 개발환경에 맞춰 만들어주는 파일을 적용하자.
 
 예를 들면, pycharm을 쓰고 있을 때 `.idea/`을 올리지 않는다거나, python에서는 `__pycache__/`를 올릴 필요는 없다.
+
+## 참고사이트
+* [좋은 git commit 메시지를 위한 영어 사전](https://blog.ull.im/engineering/2019/03/10/logs-on-git.html)
+* [git cheatsheet](http://ndpsoftware.com/git-cheatsheet.html)

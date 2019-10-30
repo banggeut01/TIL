@@ -1,39 +1,42 @@
-console.log('Happy!')
+/*
+    * var
+    * let/const
+    1-1. 선언과 할당
+*/
 
-// var
-console.log(a) // undefined => NULL
-var a = '변수' // 재할당 o, 재선언 o
-// 변수 hoisting(호이스팅: "끌어올린다") 
-// : 해당 스코프 범위 내에서 최상단에 변수의 선언을 함.
-// var a
-// console.log(a)
-// a = '변수'
+var myVar // 선언
+myVar = 1 // 하당
+console.log(myVar)
 
-// let (ES6+)
-console.log(b) // Error : Reference error!
-let b = '변수' // 재할당 o, 재선언 x
+var myVar = 'Hello' // 재선언 가능
 
-// const (ES6+)
-const c = '상수' // 재할당 x, 재선언 x
-c = '다른 값' // 재할당 => type error
-const c = '다른 상수' // 재선언 => syntax error
-const tak // syntax error
+let myLet
+myLet = 2
+myLet = 3
+// let myLet = 'hi' // SyntaxError -> 이미 선언됨
 
-// let, const vs var
-// 재선언 x    vs 재선언 o
-// 블록 스코프  vs 함수 스코프
-var outerVar = '밖'
-if (true) {
-    var outerVar = '안'
-    console.log(outerVar)
+// const myConst // SyntaxError -> 초기화 누락
+const myConst = 'hi' // 반드시 값과 함께 선언
+// myConst = 'bye' // TypeError -> const에 할당함
+
+/*
+    1-2. scope
+*/
+
+let VarFunction = function() {
+    var myVar = 0
+    if (true) {
+        var myVar = 1
+        console.log(myVar) // 1
+    }
+    console.log(myVar) // 1
 }
-console.log(outerVar)
-// 결과 안 안
 
-let outerVar = '밖'
-if (true) {
-    let outerVar = '안'
-    console.log(outerVar)
+let LetFunction = function() {
+    let myLet = 0
+    if (true) {
+        let myLet = 1
+        console.log(myLet) // 1
+    }
+    console.log(myLet) // 0
 }
-console.log(outerVar)
-// 결과 안 밖

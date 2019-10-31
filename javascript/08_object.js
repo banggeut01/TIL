@@ -10,7 +10,7 @@ const me = {
         console.log(this) // me. this는 me object
         console.log(`hi ${this.name}`) // greeting() : hi kim. 
     },
-    greeting2: () => {
+    greeting2: () => { // arrow function 쓰지 못했다.
         console.log(this) // 전역 객체인 window. this는 상위 object
         console.log(`hi ${this.name}`) // greeting2() : hi. 
     }
@@ -43,7 +43,7 @@ let bag = {
 // json dumps
 
 // JSON (Javascrip object notaion - 자바스크립트 오브젝트 표기법)
-// 문자열
+// 자바스크립트 오브젝트 표기법을 가진 문자열이다. -> 원하는 환경에서 parsing해서 사용할 수 있다. (JS-object, array, python-dictionary 등))
 // object -> JSON
 let jsonData = JSON.stringify(me)
 let myObject = JSON.parse(jsonData)

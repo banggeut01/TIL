@@ -189,3 +189,126 @@ console.log(result) // 0
 * 브라우저(프론트 앤드)를 통해 요청을 보내는 툴
 
 * 데이터는 장고 서버에 있음
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Document</title>
+</head>
+<body>
+  <button id="dog-button">댕댕이</button>
+  <div id="dogs"></div>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    const getDogImage = function () {
+      axios.get('https://dog.ceo/api/breeds/image/random')
+        .then( response => {
+        console.log(response)
+        const img = document.createElement('img')
+        img.src = response.data.message
+        img.width = 100
+        img.height = 100
+        const dogs = document.querySelector('#dogs')
+        dogs.appendChild(img)
+        })
+    }
+    const getCatImage = function () {
+    const button = document.querySelector('#dog-button')
+    button.addEventListener('click', getDogImage )
+  </script>
+</body>
+</html>
+```
+
+* axious로 요청해 응답이 오고난 후 `.then`구문을 실행함
+* axious : 비동기적 웹 어플리케이션 제작 위해 이용하는 웹 개발 기법
+
+# 비동기 작업 세가지 함수
+
+* callback (2009년까지 callback 함수만 썼다.)
+
+  해당 작업을 하는 함수를 인자로 받아서
+
+  나중에 저 함수를 부르자 (callback)
+
+* promise
+
+  Promise object를 리턴한다.
+
+  나중에(작업이 끝나면) then/catch를 실행한다.
+
+  * Promise object 상태
+    * pending -> 작업 진행중
+    * resolved -> resolve 함수 호출(작업 성공)
+    * rejected -> reject 함수 호출(작업 실패시)
+  * resolve -> then에서 처리, reject -> catch에서 처리
+
+* async / await
+
+  * try / catch로 분기가능
+
+* 세가지 기억 못하면 axios then(chaning만 외우기)
+
+# Vuejs
+
+* Vue
+  * 프론트앤드 조작하기 위한 프레임워크
+
+* SPA(Single Page Application)
+  * 하나의 페이지에서 각 요청이 일어나면 그 요청만 처리함
+  * 과거 : client 요청, server가 응답(html)
+  * 지금 : client 요청, server가 응답(JSON)
+* 3가지
+  * 앵귤러js
+  * vue.js : 앵귤러 js 장점 모아서 만듬
+  * react
+  * vue, react 많이 쓰인다.
+* M, VM, V 구조
+  * Model
+  * ViewModel
+  * View
+* JS : 명령형
+* Vue : 지시형
+
+[뷰 링크](https://kr.vuejs.org/v2/guide/)
+
+* 뷰 시작하기
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- 이 위치인 이유
+  	뷰가 먼저 load되어야 하기 때문 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> 
+      
+  </head>
+  <body>
+    <div id="app">
+      {{message}}
+    </div>
+    
+    <script>
+    // m(data) - vm(app) - v(그려지는 것)
+    const app = new Vue({
+      el: '#app', // id가 app 선택자,
+      data: {
+        message: '안녕하세요 Vue!'
+      }
+    })
+    </script>
+  </body>
+  </html>
+  ```
+
+  * 왜 프론트앤드 프레임워크를 쓰냐?
+    * app.message = '싸피!' 를 통해 바로 값을 변경할 수 있다!
+    * m(data) : 우리가 바꾸고자 하는것
+    * dom 조작을 
+    * 
+

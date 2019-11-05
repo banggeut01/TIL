@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <button v-on:click="imageCreate()">강아지</button>
+        <p>{{count}}</p>
+        <br>
+        <img v-for="imageURL in imageURLs" v-bind:src="imageURL" alt="" width="100px">
+    </div>
+    <script>
+        const app = new Vue({
+            el: '#app',
+            data: {
+                imageURLs: [],
+                count: 0
+            },
+            methods: {
+                imageCreate: function() {
+                    axios.get("https://dog.ceo/api/breeds/image/random")
+                        .then(response => {
+                            this.imageURLs.push(response.data.message)
+                            this.count++
+                    })
+                }
+            },
+        })
+    </script>
+</body>
+</html>

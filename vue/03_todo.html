@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <style>
+  body {
+    text-align: center;
+  }
+  #app {
+    margin-top: 20vh;
+  }
+  .completed {
+    color: gray;
+    text-decoration-line: line-through;
+  }
+  .blue {
+    color: blue;
+  }
+  .pink {
+    color: pink;
+  }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- 
+      디렉티브
+      v-for : 반복문
+      v-if : 조건문
+      같이 작성을 하게 되면, 매 반복에 if를 체크
+     -->
+    <img v-bind:src="logo" 
+        alt="" width="200px"> <br>
+    <!-- <h1 :class="{blue: isBlue, pink: !isBlue}">지니의 하루 투두!</h1> -->
+    <!-- <h1 style="color: {{color}}">22</h1> error -->
+    <h1 :style="{color: color, 'font-size': font}">{{ time }}</h1> <!-- binding 해서 사용해야 한다. -->
+    <!-- 'font-size' ''(따옴표) 쓰는 이유는 자바스크립트 문법, 단어 두개 이상이거나 단어가 아닐 때 '' 써서 문자임을 보여줘야함 -->
+    <button @click="allCompleted">모두 완료</button> 
+    <button @click="clearCompleted">clear</button> 
+    <br>
+    <button @click="addTodo">할일 작성!</button> <br>
+    
+    <input type="text" v-model="newTodo" v-on:keyup.enter="addTodo"> <br>
+    <select v-model="status"> <!-- v-model status 연결 -->
+      <option value="all">모두보기</option>
+      <option value="active">할 일</option>
+      <option value="complete">완료</option>
+    </select>
+    <li v-for="todo in todosByStatus" 
+      :class="{completed: todo.completed, true: true, false: false}"
+      :key="todo.id"
+      >
+      <!-- checkbox 체크하면 true, 안하면 false 이 값을 v-model(todo.completed)에 연결하였다. -->
+      <input type="checkbox" v-model="todo.completed">
+      {{ todo.content }}
+    </li>
+    
+    <!-- <li v-else v-on:click="toggleCompleted(todo)">
+      <del>
+        {{ todo.content }}
+      </del>
+    </li> -->
+  </div>
+  <script>
+    const todoStorage = {
+      fetch() { // 가져오는 작업(JSON -> object 리턴)
+        return JSON.parse(localStorage.getItem('vue-todo') || '[]') // 앞에 NULL이면 비어있는 리스트로 구성하기
+      },
+      set(todos) { // 로컬 스토리지에 저장하는 작업 (object -> JSON)
+        localStorage.setItem('vue-todo', JSON.stringify(todos))
+      }
+    }
+    const app = new Vue({
+      el: '#app',
+      data: {
+        time: '',
+        font: '50px',
+        isBlue: true,
+        color: 'blue', 
+        status: 'all', // 'active'(false), 'completed'(true)
+        newTodo: '',
+        logo: 'https://repository-images.githubusercontent.com/105165445/b8efdd00-5d13-11e9-902e-3ce3c3d7e548',
+        todos: [
+          { 
+            id: 1,
+            content: '수업 열심히 듣기',
+            completed: true
+          },
+          {
+            id: 2,
+            content: '밥 먹기',
+            completed: false
+          },
+          {
+            id: 3,
+            content: '롤 하기',
+            completed: false
+          }
+        ]
+      },
+      methods: {
+        toggleCompleted: function(todo) {
+          console.log(todo)
+          todo.completed = !todo.completed
+        },
+        addTodo: function() {
+          this.todos.push(
+            {
+              id: Date.now(),
+              content: this.newTodo, 
+              completed: false
+            }
+          )
+          this.newTodo = ''
+        },
+        allCompleted: function() {
+          this.todos.forEach(todo => {
+            todo.completed = true
+          })
+        },
+        clearCompleted() {
+          this.todos = this.todos.filter(todo => {
+            return !todo.completed
+          })
+        },
+        updateTime() {
+          const date = new Date()
+          this.time = `${date.getHours()} : ${date.getMinutes()} : ${date.getSeconds()}`
+        }
+      },
+      computed: { // 계산된 변수로서 이용
+        todosByStatus() {
+          console.log('!!!!!')
+          // this.status 1) 'active'
+          if (this.status === 'active') {
+            return this.todos.filter(todo => !todo.completed)
+          } else if (this.status === 'complete') { // 2) complete
+            return this.todos.filter(todo => todo.completed)
+          } else { // else all
+            return this.todos 
+          }
+        }
+      },
+      watch: { // 특정 데이터를 지켜보고, 그것이 변경될 때 마다 반응. 특정 data의 변경 추적, 반응
+        todos: { // todos를 바라봐!
+          handler: function() { // todos가 변경될 때마다 실행할 함수
+            todoStorage.set(this.todos)
+          },
+          deep: true // object 변화까지 반영(원소 자체 변경, 그 원소의 변경)
+        }
+      },
+      mounted: function() { // mount 될 때. 뷰가 새로 시작되는 시점(새로고침)
+        console.log('아침이 밝았습니다...')
+        this.updateTime() // 현재 시간
+        this.todos = todoStorage.fetch()
+        this.$options.myInterval = setInterval(this.updateTime, 1000)
+      },
+      beforeDestroy: function() {
+        clearInterval(this.$options.myInterval)
+      }
+    })
+  </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <li v-for="number in numbers" v-if="number % 2 === 0">
+      {{ number }}
+    </li>
+    <button v-on:click="countUp">+1</button>
+    <h1>Counter: {{ counter }}</h1>
+  </div>
+  <!-- <div class="static" v-bind:class="{ active: isActive, 'error': hasError }"></div> -->
+  <div class="static" v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">
+    <!-- 전체 문법 -->
+    <a v-bind:href="url">...</a>
+
+    <!-- 약어 -->
+    <a :href="url">...</a>
+  </div>
+  <div id="ws">
+    <button v-on:click="toggle">Toggle</button>
+    <h3 :style="{ color: color }">빨강과 파랑을 섞으면 보라색이 됩니다.</h3>
+  </div>
+  <script>
+    var app = new Vue({
+      el: '.static', // (b),
+      data: {
+        url: 'http://www.naver.com',
+        message: 'Hello, World!',
+        isActive: true,
+        hasError: false,
+        activeColor: 'red',
+        fontSize: 30
+      },
+    })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        numbers: [0,1,2,3,4,5,6,7,8,9],
+        counter: 0,
+      },
+      methods: {
+        countUp: function() {
+          this.counter++
+        }
+      }
+    })
+    var app = new Vue({
+      el: '#ws',
+      data: {
+        color: 'blue'
+      },
+      methods: {
+        toggle: function() {
+          if (this.color === 'blue') {
+            this.color = 'red'
+          } else {
+            this.color = 'blue'
+          }
+        }
+      }
+    })
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+    <input v-model.trim="message" type="text"><br> <!-- trim 앞뒤 공백 제거 -->
+    <input v-model.number="number" type="number"> <!-- .number 형변환 -->
+
+    <!-- <select v-model="select"> -->
+    <select v-model="jiwoo.poketmon">
+      <option value="꼬부기">꼬부기</option>
+      <option value="이상해씨">이상해씨</option>
+      <option value="파이리">파이리</option>
+    </select>
+
+    <input v-model="checked" type="checkbox">
+    
+    <!-- radio : value 값 꼭 쓰기 !-->
+    <label for="water">물</label>
+    <input v-model="type" value="water" type="radio" id="water">
+    <label for="fire">불</label>
+    <input v-model="type" value="fire" type="radio" id="fire">
+    <label for="green">풀</label>
+    <input v-model="type" value="green" type="radio" id="green">
+
+  </div>
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        jiwoo: {
+          poketmon: ''
+        },
+        message: '',
+        number: 0, // 문자열로 바인딩
+        select: '', // option value값
+        checked: true, // true, false로 바인딩
+        type: '', // radio value값 
+      }
+    }) 
+  </script>
+</body>
+</html>

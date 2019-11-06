@@ -27,7 +27,17 @@
     <button v-on:click="toggle">Toggle</button>
     <h3 :style="{ color: color }">빨강과 파랑을 섞으면 보라색이 됩니다.</h3>
   </div>
+  <div id='link'>
+    <input v-model="url" type="text">
+    <a :href="url">Go!</a>
+  </div>
   <script>
+    var app = new Vue({
+      el: '#link',
+      data: {
+        url: ''
+      }
+    })
     var app = new Vue({
       el: '.static', // (b),
       data: {

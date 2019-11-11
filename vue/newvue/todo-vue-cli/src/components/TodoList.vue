@@ -12,6 +12,7 @@
 <script>
 export default {
     props: {
+        // props를 통해 category 값을 받음!
         category: {
          type: String,
          required: true // 항상 필요하다!

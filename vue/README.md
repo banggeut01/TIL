@@ -266,3 +266,147 @@ cd todo-vue-cli
 
 npm run serve => 액세스 허용
 
+# Youtube 기능 구현하기
+
+```
+$ vue create youtube
+```
+
+youtube 폴더에서 서버 실행해봄
+
+```
+$ npm run serve
+```
+
+* extension : `Vue 2 Snippets`, `vetur`
+
+## 컴포넌트 구조
+
+```
+App
+  |----SearchBar
+  |----VideoList
+  				|----VideoListItem
+  |----VideoDetail
+```
+
+## `SearchBar`
+
+* [코드]() 
+
+* `SearchBar`에서 `App`으로 검색어(input값) 전달해야한다.
+* `App`은 Youtube API에 검색어로 요청 후 video를 `Videolist`, `VideoListIemp`으로 전달
+
+* `v-model`을 사용하는 대신 input값이 변경될 때마다 onInput함수 실행
+
+  ```html
+  <input @change="onInput" type="text"> 
+  ```
+
+* 콘솔로 입력값 확인
+
+  * `package.json` 에 rules 옵션 추가해줌
+
+  * console.log 활용 가능한 옵션
+
+    ```
+        "rules": {
+          "no-console": "off" 
+        },
+    ```
+
+* 상위 컴포넌트로 데이터 전송하기 - 이벤트 발생
+
+  * Cf) 상위 -> 하위 컴포넌트 데이터 전송시엔 props를 사용한다.
+
+  ```js
+  methods: {
+          onInput(event) {
+              console.log('==SearchBar==')
+              console.log(event.target.value)
+              // $emit(이벤트이름, 값) : 커스텀 이벤트 발생
+              // 이벤트이름의 이벤트를 발생 시킴(트리거)
+              this.$emit('input-change-event', event.target.value)
+          }
+      }
+  ```
+
+  * 부모 컴포넌트 App.vue에 추가
+
+    ```vue
+    <template>
+      <div id="app">
+        <Search-bar @input-change-event="onInputChange"></Search-bar> <!-- 출력 -->
+      </div>
+    </template>
+    ```
+
+## youtube api
+
+[구글 개발자 콘솔](https://console.developers.google.com/)
+
+프로젝트 만들기 > 라이브러리 > 'youtube data v3' 클릭 > 사용 설정 > Create Credentials
+
+youtube data api v3, 웹브라우저(js), 공개데이터 체크 후 파란 버튼
+
+api 키 복사 후 완료
+
+---
+
+[youtube api 공식 문서](https://developers.google.com/youtube/v3/getting-started?hl=ko)
+
+왼쪽 메뉴에서 Freebase 주제로 검색 클릭 > 
+
+### axiou 쓰기
+
+> CDN 대신 npm으로 쓰기
+
+```
+$ npm install axios
+```
+
+```vue
+<script>
+import axios from 'axios'
+...
+export default {
+    ...
+    methods: {
+        onInputChange(value) {
+          console.log('==App==')
+          console.log(value)
+          axios.get('https://www.googleapis.com/youtube/v3/search', {
+            params: {
+              key: API_KEY,
+              part: 'snippet', 
+              q: value
+            }
+          }).then(response => {
+            console.log(response)
+          })
+        }
+      }
+    }
+}
+```
+
+## `VideoDetail`
+
+* `VideoListItem`에서 (li태그)클릭하면 `VideoDetail`에서 동영상을 보여줌
+* VideoListItem -> VideoList -> VideoDetail 로 데이터 보내야 함
+
+## App - SearchBar
+
+* input 태그에 등록된 이벤트 (@input)
+
+* trigger : input 값이 변경 되면, 
+* 인자로 `event`
+* `onInput` method 실행
+
+---
+
+* search-bar 컴포넌트에 등록된 이벤트(@input-change-event)
+
+* trigger : `$emit` 메서드 실행되면, (자식 컴포넌트)
+* 인자로 `event.target.value`
+* `onInputChange`실행

@@ -357,7 +357,7 @@ api 키 복사 후 완료
 
 왼쪽 메뉴에서 Freebase 주제로 검색 클릭 > 
 
-### axiou 쓰기
+### axios 쓰기
 
 > CDN 대신 npm으로 쓰기
 

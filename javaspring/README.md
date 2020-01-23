@@ -43,7 +43,7 @@
   * `Java compiler` > `Use default compliance settings` 체크해제 > `Generated .class files compatibility`  1.8  확인 > apply > close
 
 * pom 설정
-  * [pom.xml 소스보기](./java_settings_files/project_setting/pom.xml)
+  * [pom.xml 소스보기](./java_setting_files/project_setting/pom.xml)
   * `pom.xml` 설정 파일 덮어쓰기
     * Java Spring 쓸 때 기본적으로 많이 쓰는 것들
     * `<dependency>` : 내가 쓸 라이브러리 추가하는 공간
@@ -78,14 +78,14 @@
 
   * `src/main/java/com.ssafy.itda.itda_test` 위치에 `SSAFYApplication.java`, `SwaggerConfig.java` 파일 복사하기
 
-    * [SSAFYApplication.java 소스보기](./java_settings_files/src_main_java_package/SSAFYApplication.java)
-    * [SwaggerConfig.java 소스보기](./java_settings_files/src_main_java_package/SwaggerConfig.java)
+    * [SSAFYApplication.java 소스보기](./java_setting_files/src_main_java_package/SSAFYApplication.java)
+    * [SwaggerConfig.java 소스보기](./java_setting_files/src_main_java_package/SwaggerConfig.java)
 
   * `src/main/java` 우클릭 > New > package > `com.ssafy.itda.itda_test.controller`(dao, help, model, service) 만들기
 
   * `src` > `main` > `resources` 폴더 만들기 > 파일들 복붙
 
-    * [resources 소스보기](./java_settings_files/src_main_resource)
+    * [resources 소스보기](./java_setting_files/src_main_resource)
 
     * `resources` 폴더의 `application.properties` 
 
@@ -141,16 +141,56 @@
    return new ResponseEntity<returnResult>('return 결과 변수 명', HttpStatus.OK);
    ```
 
+   emailCheck 예시)
    
+   ```java
+   @ApiOperation(value = " email 중복을 확인한다.", response = UserResult.class)
+   @RequestMapping(value = "/emailCheck/{eamil}", method = RequestMethod.GET)
+   public ResponseEntity<UserResult> signUp(@PathVariable String email) throws Exception {
+       logger.info("1-2-------------emailCheck-------------------------" + new Date());
+       logger.info("1-2-------------emailCheck-------------------------" + email);
+   
+       // 'email'이라는 email 을 가지고 있는 객체 user에 저장
+       User user = userService.emailCheck(email);
+       // 새로운 UserResult 생성, 반환객체
+       UserResult ur = new UserResult();
+       if (user != null) {
+           ur.setMsg("중복된 아이디입니다.");
+           ur.setState("fail");
+       } else {
+           ur.setMsg("사용가능한 아이디입니다.");
+           ur.setState("success");
+       }
+       return new ResponseEntity<UserResult>(ur, HttpStatus.OK);
+   }
+   ```
+   
+   * `RequestMethod`가 `GET`일 때 `@PathVariable`
+   * `POST`일 때 `@RequestBody`
+   * 주의) `user`는 객체이므로 `if (user)`가 아닌 `if (user != null)`로 써줘야한다.
 
 #### Service
 
 * service -> new -> Interface -> 인터페이스명 (IXxxService) -> finish
 
 1. 사용할 함수를 **선언**만
+
 2. 규칙 : 'return 타입' '함수 명'('파라미터')
 
-​	
+   emailCheck 예제)
+
+   ```java
+   package com.ssafy.itda.itda_test.service;
+   
+   import com.ssafy.itda.itda_test.model.User;
+   
+   public interface IUserService {
+   	void signUp(User u);
+   	void emailCheck(String email);
+   }
+   ```
+
+   
 
 * service -> new -> class -> 클래스명(XxxServiceImpl) -> Interface -> IXxxService -> finish
 
@@ -174,7 +214,22 @@ private XxxDao xxxDao;
    }
    ```
 
+   * emailCheck 예시)
 
+     ```java
+     public void signUp(User u) {
+         // TODO Auto-generated method stub
+         userDao.signUp(u);
+     }
+     
+     @Override
+     public User emailCheck(String email) {
+         return userDao.emailCheck(email);
+     }
+     ```
+
+     * `signUp()`은 반환 결과가 없다. DB에서 insert
+     * `emailCheck()`는 반환결과가 User 객체이다. DB에서 select
 
 #### #Dao
 
@@ -205,7 +260,19 @@ private XxxDao xxxDao;
 
 5. [다시 Service 로 가기](#service-autowired)
 
+   * emailCheck 예시)
 
+     ```java
+     public void signUp(User u) {
+         sqlSession.insert(ns + "signUp", u);
+     }
+     
+     public User emailCheck(String email) {
+         return sqlSession.selectOne(ns + "emailCheck",  email);
+     }
+     ```
+
+     
 
 #### XML
 
@@ -220,8 +287,27 @@ private XxxDao xxxDao;
   ```
 
   SQL 문 안에 모델의 데이터는 `#{ 변수명(소문자) }` 으로 작성
-
-
+  
+  * emailCheck 예시)
+  
+    ```java
+    <!-- sha1 : sha1이라는 보안기법에 의해 pw 자동 변환 -->
+    <insert id="signUp" 
+        parameterType="com.ssafy.itda.itda_test.model.User">
+        INSERT INTO USER_T(EMAIL, PW, UNAME)
+        VALUES ( #{email}, sha1(#{pw}), #{uname} ) 
+    </insert>
+    
+    <select id="emailCheck"
+        parameterType="String"
+        resultType="com.ssafy.itda.itda_test.model.User">
+        SELECT *
+        FROM USER_T
+        WHERE EMAIL = #{email}
+    </select>
+    ```
+  
+    * `insert` 문은 리턴이 없다. 
 
 #### Help
 

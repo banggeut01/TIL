@@ -319,3 +319,8 @@ private XxxDao xxxDao;
 
 응답 결과에 담을 변수들을 정의
 
+#### 실행
+
+* `SSAFYApplication.java` 실행하면 레스트풀 메인 시작
+* 브라우저에서 아래 주소로 접속
+  * http://localhost:8197/ssafyvue/swagger-ui.html

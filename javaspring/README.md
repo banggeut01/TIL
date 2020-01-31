@@ -8,15 +8,16 @@
   * [Eclipse IDE for Java EE Developers download](https://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release/photon/R/eclipse-jee-photon-R-win32-x86_64.zip)
 * MySQL
   * [MySQL 워크벤치 download](https://dev.mysql.com/downloads/file/?id=492814)
+  * [설치 가이드](https://dog-developers.tistory.com/20)
 
 ## Java Eclipse 환경설정
 
 1. 기본 위치 (ex. C:\Program Files\Java\jdk-13.0.2)  경로 복사
 2. 환경변수 설정
    1.  윈도우 시스템 환경 변수 편집
-   2. 시스템변수 새로 만들기
-   3. 변수이름 `JAVA_HOME`, 변수값: `복붙(ex. C:\Program Files\Java\jdk-13.0.2) ` 
-   4. 시스템변수 path  새로 만들기 
+   2.  시스템변수 새로 만들기
+   3.  변수이름 `JAVA_HOME`, 변수값: `복붙(ex. C:\Program Files\Java\jdk-13.0.2) ` 
+   4.  시스템변수 path  새로 만들기 
    5.  `%JAVA_HOME%\bin` 엔터 후 맨위로 올리기
 
 
@@ -30,6 +31,7 @@
 ### 프로젝트 생성 및 설정
 
 * 프로젝트 생성
+
   * new > Maven project > next  > `quickstart` 선택 > next > 
 
     `Group Id` : `com.ssafy.itda` (이 프로젝트의 기본이 되는 주소)  
@@ -43,6 +45,7 @@
   * `Java compiler` > `Use default compliance settings` 체크해제 > `Generated .class files compatibility`  1.8  확인 > apply > close
 
 * pom 설정
+
   * [pom.xml 소스보기](./java_setting_files/project_setting/pom.xml)
   * `pom.xml` 설정 파일 덮어쓰기
     * Java Spring 쓸 때 기본적으로 많이 쓰는 것들
@@ -101,6 +104,7 @@
       주소 변경
 
 * 폴더 설명
+
   * `controller` : 클라이언트에서 API 요청 시 해당 api 주소와 매핑되어 실행하게 될 함수들 정의 부분
   * `model` : DB table과 동일한 구조(=dto)
   * `help` : 클라이언트에게 API 호출 시 반환해 줄 데이터 구조(=Response)
@@ -110,7 +114,9 @@
   * `dao` : `src/main/java/resources/mapper` 에 있는 xml과 매핑되어 JPA를 실행할 함수 정의
     * = JPA Repository (참고한 블로그에서 말하는 부분)
     * [JPA(Java Persistent API)란? 블로그 링크](https://blog.woniper.net/255)
+
 * 흐름
+
   * 요청 => `Client` -> `controller` -> `service` -> `dao` -> `xml` -> `Database Server`
   * 반환 => `dao` -> `service` -> `controller` ->`help` -> `Client` 
 
@@ -142,7 +148,7 @@
    ```
 
    emailCheck 예시)
-   
+
    ```java
    @ApiOperation(value = " email 중복을 확인한다.", response = UserResult.class)
    @RequestMapping(value = "/emailCheck/{eamil}", method = RequestMethod.GET)
@@ -164,194 +170,10 @@
        return new ResponseEntity<UserResult>(ur, HttpStatus.OK);
    }
    ```
-   
+
    * `RequestMethod`가 `GET`일 때 `@PathVariable`
-   
    * `POST`일 때 `@RequestBody`
-   
    * 주의) `user`는 객체이므로 `if (user)`가 아닌 `if (user != null)`로 써줘야한다.
-   
-   * controller 기본세팅
-   
-     ```java
-     package com.ssafy.itda.itda_test.controller;
-     ​
-     import java.util.Date;
-     import java.util.List;
-     ​
-     import org.slf4j.Logger;
-     import org.slf4j.LoggerFactory;
-     import org.springframework.beans.factory.annotation.Autowired;
-     import org.springframework.http.HttpStatus;
-     import org.springframework.http.ResponseEntity;
-     import org.springframework.web.bind.annotation.CrossOrigin;
-     import org.springframework.web.bind.annotation.PathVariable;
-     import org.springframework.web.bind.annotation.RequestBody;
-     import org.springframework.web.bind.annotation.RequestMapping;
-     import org.springframework.web.bind.annotation.RequestMethod;
-     import org.springframework.web.bind.annotation.RestController;
-     ​
-     import com.ssafy.itda.itda_test.model.User;
-     import com.ssafy.itda.itda_test.service.IUserService;
-     ​
-     import io.swagger.annotations.Api;
-     import io.swagger.annotations.ApiOperation;
-     ​
-     //http://localhost:8197/humans/swagger-ui.html
-     @CrossOrigin(origins = { "*" }, maxAge = 6000)
-     @RestController
-     @RequestMapping("/api")
-     @Api(value = "SSAFY", description = "SSAFY Resouces Management 2019")
-     public class UserController {
-     	public static final Logger logger = LoggerFactory.getLogger(UserController.class);
-     ​
-     	@Autowired
-     	private IUserService memService;
-     ​
-     	@ApiOperation(value = "모든 회원의 정보를 반환한다.", response = List.class)
-     	@RequestMapping(value = "/Users", method = RequestMethod.GET)
-     	public ResponseEntity<List<User>> Users() throws Exception {
-     		logger.info("1-------------Users-----------------------------" + new Date());
-     		List<User> mems = memService.getAllUsers();
-     		if (mems.isEmpty()) {
-     			return new ResponseEntity(HttpStatus.NO_CONTENT);
-     		}
-     		return new ResponseEntity<List<User>>(mems, HttpStatus.OK);
-     	}
-     ​
-     	@ApiOperation(value = "ID에 해당하는 회원의 정보를 반환한다.", response = User.class)
-     	@RequestMapping(value = "/User/{id}", method = RequestMethod.GET)
-     	public ResponseEntity<User> User(@PathVariable String id) throws Exception {
-     		logger.info("1-------------User-----------------------------" + new Date());
-     		User mem = memService.getUser(id);
-     		if (mem == null || mem.getId() == null || mem.getId().equals("")) {
-     			return new ResponseEntity(HttpStatus.NO_CONTENT);
-     		}
-     		return new ResponseEntity<User>(mem, HttpStatus.OK);
-     	}
-     ​
-     	@ApiOperation(value = " 새로운 회원의 정보를 입력한다.", response = UserResult.class)
-     	@RequestMapping(value = "/signUp", method = RequestMethod.POST)
-     	public ResponseEntity<UserResult> signUp(@RequestBody User dto) throws Exception {
-     		logger.info("5-------------signUp-----------------------------" + new Date());
-     		logger.info("5-------------signUp-----------------------------" + dto);
-     		if (dto.getAllergys() != null) {
-     			String[] allergys = dto.getAllergys();
-     			StringBuilder sb = new StringBuilder();
-     			for (int i = 0; i < allergys.length; i++) {
-     				if (i == allergys.length - 1) {
-     					sb.append(allergys[i]);
-     				} else {
-     					sb.append(allergys[i]).append(",");
-     				}
-     			}
-     			dto.setAllergy(sb.toString());
-     		}
-     ​
-     		User mem = memService.getUser(dto.getId());
-     		UserResult mr = new UserResult();
-     		if (mem != null) {
-     			mr.setName("이미 존재하는 회원ID입니다.");
-     			mr.setState("false");
-     			return new ResponseEntity<UserResult>(mr, HttpStatus.OK);
-     		}
-     		mem = memService.emailCheck(dto.getEmail());
-     		if (mem != null) {
-     			mr.setName("이미 존재하는 email입니다.");
-     			mr.setState("false");
-     			return new ResponseEntity<UserResult>(mr, HttpStatus.OK);
-     		}
-     		memService.signUp(dto);
-     		mr.setId(dto.getId());
-     		mr.setName("성공적으로 회원가입이 완료되었습니다.");
-     		mr.setState("succ");
-     		return new ResponseEntity<UserResult>(mr, HttpStatus.OK);
-     	}
-     ​
-     	@ApiOperation(value = " 회원의 정보가 일치하면 로그인한다.", response = UserResult.class)
-     	@RequestMapping(value = "/signIn", method = RequestMethod.POST)
-     	public ResponseEntity<UserResult> signIn(@RequestBody User dto) throws Exception {
-     		logger.info("5-------------signIn-----------------------------" + new Date());
-     		logger.info("5-------------signIn-----------------------------" + dto);
-     		System.out.println(dto.getAllergy());
-     		User mem = memService.signIn(dto);
-     		UserResult mr = new UserResult();
-     		if (mem == null || mem.getId() == null || mem.getId().equals("")) {
-     			mr.setLogin(false);
-     			mr.setName("로그인에 실패했습니다.");
-     			mr.setState("fail");
-     			return new ResponseEntity<UserResult>(mr, HttpStatus.OK);
-     		}
-     		mr.setId(mem.getId());
-     		mr.setLogin(true);
-     		mr.setEmail(mem.getEmail());
-     		mr.setAllergy(mem.getAllergy());
-     		mr.setAuth(mem.getAuth());
-     		mr.setName("성공적으로 로그인이 완료되었습니다.");
-     		mr.setState("succ");
-     		return new ResponseEntity<UserResult>(mr, HttpStatus.OK);
-     	}
-     ​
-     	@ApiOperation(value = " 해당 회원의 정보를 삭제한다.", response = BoolResult.class)
-     	@RequestMapping(value = "/deleteUser/{id}", method = RequestMethod.DELETE)
-     	public ResponseEntity<BoolResult> deleteUser(@PathVariable String id) throws Exception {
-     		logger.info("1-------------deleteUser-----------------------------" + new Date());
-     		logger.info("1-------------deleteUser-----------------------------" + id);
-     		User mem = memService.getUser(id);
-     		BoolResult br = new BoolResult();
-     		if (mem == null || mem.getId() == null || mem.getId().equals("")) {
-     			return new ResponseEntity(HttpStatus.NO_CONTENT);
-     		} else {
-     			memService.deleteUser(id);
-     			br.setName("회원탈퇴가 성공적으로 처리되었습니다.");
-     			br.setState("succ");
-     			return new ResponseEntity<BoolResult>(br, HttpStatus.OK);
-     		}
-     	}
-     ​
-     	@ApiOperation(value = " 회원의 정보를 수정한다.", response = UserResult.class)
-     	@RequestMapping(value = "/updateUser", method = RequestMethod.PUT)
-     	public ResponseEntity<UserResult> updateUser(@RequestBody User dto) throws Exception {
-     		logger.info("5-------------updateUser-----------------------------" + new Date());
-     		logger.info("5-------------updateUser-----------------------------" + dto);
-     		if (dto.getAllergys() != null) {
-     			String[] allergys = dto.getAllergys();
-     			StringBuilder sb = new StringBuilder();
-     			for (int i = 0; i < allergys.length; i++) {
-     				if (i == allergys.length - 1) {
-     					sb.append(allergys[i]);
-     				} else {
-     					sb.append(allergys[i]).append(",");
-     				}
-     			}
-     			if(sb.toString().contains("해당없음")) {
-     				dto.setAllergy(null);
-     			}else {
-     				dto.setAllergy(sb.toString());
-     			}
-     		}
-     		memService.updateUser(dto);
-     		User mem = memService.getUser(dto.getId());
-     		UserResult mr = new UserResult();
-     		if (mem == null || mem.getId() == null || mem.getId().equals("")) {
-     			mr.setId("");
-     			mr.setName("회원 수정에 실패했습니다.");
-     			mr.setState("fail");
-     			return new ResponseEntity<UserResult>(mr, HttpStatus.OK);
-     		}
-     		mr.setId(mem.getId());
-     		mr.setLogin(true);
-     		mr.setEmail(mem.getEmail());
-     		mr.setAllergy(mem.getAllergy());
-     		mr.setAuth(mem.getAuth());
-     		mr.setName("성공적으로 회원 수정을 완료했습니다.");
-     		mr.setState("succ");
-     		return new ResponseEntity<UserResult>(mr, HttpStatus.OK);
-     	}
-     }
-     ```
-   
-     
 
 #### Service
 
@@ -383,12 +205,12 @@
 2. [dao 먼저 정의하기](#dao)
 
 3. #service autowired
-   
+
    ```java
    @Autowired
-private XxxDao xxxDao;
+   private XxxDao xxxDao;
    ```
-   
+
 4. 함수 구현 
 
    ```java
@@ -460,6 +282,21 @@ private XxxDao xxxDao;
 
 #### XML
 
+* src/main/resources/mapper/mybatis-config 수정
+
+  * 맵퍼 부분에 아래와 같이 일치시켜준다.
+
+    ```xml
+    <mappers>
+        <mapper resource="mapper/user.xml"/>
+        <mapper resource="mapper/wanted.xml"/>
+        <mapper resource="mapper/company.xml"/>        
+        <mapper resource="mapper/job.xml"/>        
+    </mappers>
+    ```
+
+    
+
 * src/main/java/resources/mapper 위치에 있는 xxx.xml 파일에서 sql문 정의
 
   ```xml
@@ -471,9 +308,9 @@ private XxxDao xxxDao;
   ```
 
   SQL 문 안에 모델의 데이터는 `#{ 변수명(소문자) }` 으로 작성
-  
+
   * emailCheck 예시)
-  
+
     ```java
     <!-- sha1 : sha1이라는 보안기법에 의해 pw 자동 변환 -->
     <insert id="signUp" 
@@ -490,7 +327,7 @@ private XxxDao xxxDao;
         WHERE EMAIL = #{email}
     </select>
     ```
-  
+
     * `insert` 문은 리턴이 없다. 
 
 #### Help
@@ -503,8 +340,3 @@ private XxxDao xxxDao;
 
 응답 결과에 담을 변수들을 정의
 
-#### 실행
-
-* `SSAFYApplication.java` 실행하면 레스트풀 메인 시작
-* 브라우저에서 아래 주소로 접속
-  * http://localhost:8197/ssafyvue/swagger-ui.html
